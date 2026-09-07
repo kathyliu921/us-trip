@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#FBF8F1" />
-<title>行程管家 · Itinerary Studio（可自定义模板）</title>
+<title>US Itinerary - Sep</title>
 <meta name="description" content="通用行程管理与海报生成模板，支持富文本、拖拽排序、相册与多套设计风格。" />
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -158,7 +158,7 @@ const CV={nature:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAU
   </header>
 
   <!-- ===== 封面 ===== -->
-  <section id="cover" class="relative rounded-xl2 overflow-hidden shadow-lux mt-4 group" style="border:none">
+  <section id="cover" class="relative overflow-hidden shadow-lux mt-4 group -mx-3.5 sm:-mx-6" style="border:none;border-radius:0">
     <div id="coverImg" class="relative bg-cover bg-center transition-all duration-500" style="height:var(--cover-h,320px)"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(0deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,.08) 40%,rgba(0,0,0,.02) 70%,rgba(0,0,0,.05) 100%)"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 85%,rgba(0,0,0,.2) 0%,transparent 100%)"></div>
@@ -272,7 +272,7 @@ const CV={nature:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAU
   <div class="relative w-full max-w-xs mx-4 rounded-2xl shadow-lux p-5" style="background:var(--surface2)" onclick="event.stopPropagation()">
     <div class="text-sm font-semibold mb-1" id="passTitle">请输入口令</div>
     <div class="text-[11px] text-mute mb-3" id="passHint"></div>
-    <input id="passInput" type="password" class="w-full rounded-xl bg-ink/5 border border-line px-3 py-2.5 text-sm focus:outline-none focus:border-accent" onkeydown="if(event.key==='Enter')confirmPass()">
+    <input id="passInput" type="password" class="w-full rounded-xl bg-ink/5 border border-line px-3 py-2.5 text-sm focus:outline-none focus:border-accent" style="color:var(--text)" onkeydown="if(event.key==='Enter')confirmPass()">
     <div id="passError" class="text-[11px] text-red-500 mt-1.5 hidden"></div>
     <div class="flex gap-2 mt-4">
       <button onclick="closePassModal()" class="flex-1 rounded-xl py-2.5 border border-line text-xs font-medium text-mute hover:text-accent hover:border-accent/50 transition" data-i18n="cancel">取消</button>

@@ -1852,7 +1852,7 @@ function boot(){
   try{LANG=localStorage.getItem('it_lang')||'zh'}catch(e){}applyFont(fontOverride());
   seedMT();document.body.classList.toggle('lang-en',LANG==='en');
   mode=(data.startMode==='view')?'view':'edit';
-  applyCatVars();setCover(data.cover);applyCoverVars();syncCover();initRTEBar();applyLang();renderTabs();renderLegend();switchView('summary');applyMode();
+  applyCatVars();setCover(data.cover);applyCoverVars();syncCover();initRTEBar();applyLang();renderTabs();renderLegend();switchView(activeView||'notice');applyMode();
   refreshSyncUI();if((data.syncRead||'').trim())cloudPull(true);
   if(LANG==='en')afterRender();
 }

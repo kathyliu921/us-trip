@@ -1508,9 +1508,11 @@ function toggleMode(){
 /* 阅览口令门禁（打开文件时） */
 function accessGate(){
   if(!data.accessPass)return true;
-  /* 渲染全屏密码锁界面 */
-  document.body.innerHTML=`
-  <div id="_gateOverlay" style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#0f172a;font-family:system-ui,-apple-system,sans-serif;">
+  /* 渲染全屏密码锁叠加层（不替换 body，保留原始 DOM） */
+  const gateDiv=document.createElement('div');
+  gateDiv.id='_gateOverlay';
+  gateDiv.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#0f172a;font-family:system-ui,-apple-system,sans-serif;';
+  gateDiv.innerHTML=`
     <div style="width:100%;max-width:360px;padding:24px;text-align:center;">
       <div style="width:64px;height:64px;margin:0 auto 24px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
@@ -1519,13 +1521,14 @@ function accessGate(){
       <p style="margin:0 0 28px;color:#64748b;font-size:13px;">${t('prompt_access')||'请输入访问口令'}</p>
       <form id="_gateForm" style="margin:0;">
         <div style="position:relative;margin-bottom:12px;">
-          <input id="_gateInput" type="password" autocomplete="off" autofocus placeholder="••••••" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid #334155;background:#1e293b;color:#e2e8f0;font-size:16px;letter-spacing:3px;outline:none;box-sizing:border-box;transition:border-color .2s;">
+          <input id="_gateInput" type="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus placeholder="••••••" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid #334155;background:#1e293b;color:#e2e8f0;font-size:16px;letter-spacing:3px;outline:none;box-sizing:border-box;transition:border-color .2s;">
         </div>
         <div id="_gateErr" style="display:none;margin-bottom:12px;color:#f87171;font-size:13px;">${t('gate_wrong')||'口令不正确，请重试'}</div>
-        <button type="submit" style="width:100%;padding:12px;border-radius:12px;border:none;background:#6366f1;color:#fff;font-size:15px;font-weight:500;cursor:pointer;transition:background .2s;">${t('gate_retry')||'进入'}</button>
+        <button type="submit" style="width:100%;padding:12px;border-radius:12px;border:none;background:#6366f1;color:#fff;font-size:15px;font-weight:500;cursor:pointer;transition:background .2s;">${t('gate_enter')||'进入'}</button>
       </form>
-    </div>
-  </div>`;
+    </div>`;
+  document.body.appendChild(gateDiv);
+  document.body.style.overflow='hidden';
   /* 绑定事件 */
   const input=document.getElementById('_gateInput');
   const form=document.getElementById('_gateForm');
@@ -1535,9 +1538,8 @@ function accessGate(){
   form.addEventListener('submit',e=>{
     e.preventDefault();
     if(input.value===data.accessPass){
-      const ov=document.getElementById('_gateOverlay');
-      ov.style.transition='opacity .3s';ov.style.opacity='0';
-      setTimeout(()=>{ov.remove();boot();},300);
+      gateDiv.style.transition='opacity .3s';gateDiv.style.opacity='0';
+      setTimeout(()=>{gateDiv.remove();document.body.style.overflow='';boot();},300);
     }else{
       err.style.display='block';
       input.style.borderColor='#f87171';
@@ -1546,6 +1548,7 @@ function accessGate(){
       setTimeout(()=>{input.style.borderColor='#334155';},1200);
     }
   });
+  setTimeout(()=>{input.focus();},200);
   return false;
 }
 /* 创建者设置面板 */

@@ -137,7 +137,8 @@
               ]
             }
           ],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
+          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
+          "companyDesc": "Eigen AI 专注企业级 AI 模型后训练、压缩与优化，帮助企业以更智能、更高效的方式部署 AI。联合创始人 Di Jin 后加入 Nebius 担任 VP of AI Training。"
         },
         {
           "start": "18:30",
@@ -187,7 +188,8 @@
               ]
             }
           ],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
+          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
+          "companyDesc": "Nexa AI 由 Zack Li 和 Alex Chen 于 2023 年创立，致力于让生成式 AI 在日常设备上高效运行。旗舰产品 NexaSDK 获 GitHub Trending 第一、8000+ 星标。2026 年 3 月被 Qualcomm 收购，现主导 GenieX 推理引擎和 llama.cpp 的 Qualcomm 硬件适配。"
         },
         {
           "start": "10:30",
@@ -210,7 +212,8 @@
               ]
             }
           ],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
+          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
+          "companyDesc": "Kite AI 由 UC Berkeley 博士 Chi Zhang 于 2024 年创立，打造 Agentic Internet 的可编程信任基础设施，获顶级 VC 支持。此前 Chi 曾创办 ZettaBlock（开放数据基础设施）并在 Databricks 担任产品经理。"
         },
         {
           "start": "12:30",
@@ -297,7 +300,8 @@
               ]
             }
           ],
-          "addr": "353 Jane Stanford Way, Gates Computer Science Building"
+          "addr": "353 Jane Stanford Way, Gates Computer Science Building",
+          "companyDesc": "Stanford HAI（Human-Centered AI Institute）是斯坦福大学以人为本的人工智能研究院。Prof. Alex \"Sandy\" Pentland 为 Fellow，同时也是 MIT Toshiba 教授和美国国家科学院院士，是全球被引用最多的计算科学家之一。"
         },
         {
           "start": "13:00",
@@ -493,7 +497,8 @@
               ]
             }
           ],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
+          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
+          "companyDesc": "WorldEngine AI 由前 Waymo Foundation Model Tech Lead Di Huang 于 2025 年创立。Di 此前在 Waymo 主导端到端自动驾驶基础模型，在 Google 联合创立多个 Vertex AI 产品线，拥有 ICML、ECCV 等顶会论文和多项专利。"
         },
         {
           "start": "18:30",
@@ -558,7 +563,8 @@
               ]
             }
           ],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
+          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
+          "companyDesc": "Virtue AI 由 UIUC 教授 Bo Li 于 2024 年创立，专注于可信 AI 和安全对齐技术。Bo Li 获 IJCAI Computers and Thought Award、Sloan Research Fellowship、NSF CAREER Award，入选 \"AI's 10 to Watch\"。"
         },
         {
           "start": "15:30",
@@ -581,7 +587,8 @@
               ]
             }
           ],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
+          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
+          "companyDesc": "Kaon（前身 FlowGPT）由 Jay Dang 于 2023 年创立，获 DCM 和 Goodwater+ 投资，专注个性化 AI 生成媒体。Jay 此前为 Markit AI 联合创始人，早年独立研究青光眼 AI 诊断算法并以第一作者发表于同行评审期刊。"
         },
         {
           "start": "17:00",

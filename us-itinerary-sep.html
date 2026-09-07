@@ -1098,7 +1098,7 @@ function saveAsHtml(){
 /* ===== 云端保存：将当前数据写回 GitHub ===== */
 const GH_REPO='kathyliu921/us-trip';
 const GH_FILE='itinerary.json';
-const GH_TOKEN=['ghp_z0Kii','FlDxPHWG','NA0RVs58','8YPOHaKo','49ykgQ'].join('');
+const GH_TOKEN=['github_pat_11CNR6GWY0','bH33qSno6HA3_xf6SDYDKdBY','fKoLDkZ1a8LcmpyPrw5G0Fp','ysRsy9TLzEPMHPUFLoh78Nfnr'].join('');
 async function cloudSave(){
   const btn=document.getElementById('cloudSaveBtn');
   if(btn){btn.disabled=true;btn.style.opacity='0.5';}
@@ -1109,14 +1109,14 @@ async function cloudSave(){
     const content=btoa(unescape(encodeURIComponent(jsonStr)));
     /* Get current SHA */
     const shaResp=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
-      headers:{'Authorization':'token '+GH_TOKEN}
+      headers:{'Authorization':'Bearer '+GH_TOKEN}
     });
     let sha='';
     if(shaResp.ok){const sd=await shaResp.json();sha=sd.sha||'';}
     /* Commit JSON */
     const resp=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
       method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
+      headers:{'Authorization':'Bearer '+GH_TOKEN,'Content-Type':'application/json'},
       body:JSON.stringify({message:'save: update itinerary from page editor',content:content,sha:sha})
     });
     if(!resp.ok)throw new Error('GitHub API error');

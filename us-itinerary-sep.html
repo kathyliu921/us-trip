@@ -485,7 +485,7 @@ const catColor=id=>{const c=data.categories.find(x=>x.id===id||x.name===id);retu
 /* =========================================================
    主题
    ========================================================= */
-const THEMES=[{id:'editorial',name:'杂志编辑',en:'Editorial'},{id:'business',name:'商务简约',en:'Business'},{id:'chinese',name:'中式雅韵',en:'Oriental'},{id:'blossom',name:'清新可爱',en:'Blossom'},{id:'midnight',name:'暗夜雅奢',en:'Midnight'}];
+const THEMES=[{id:'editorial',name:'杂志编辑',en:'Editorial'},{id:'business',name:'商务简约',en:'Business'},{id:'chinese',name:'中式雅韵',en:'Oriental'},{id:'midnight',name:'科技深蓝',en:'Midnight'}];
 const ACCENTS=['#B45309','#2563EB','#B4302B','#DB2777','#7C3AED','#059669','#0891B2','#D97706'];
 function setTheme(id){document.documentElement.setAttribute('data-theme',id);try{localStorage.setItem('it_theme',id)}catch(e){}
   const a=accOverride();if(a)document.documentElement.style.setProperty('--accent',a);else document.documentElement.style.removeProperty('--accent');

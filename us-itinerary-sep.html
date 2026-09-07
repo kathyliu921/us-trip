@@ -272,7 +272,7 @@ const CV={nature:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAU
   <div class="relative w-full max-w-xs mx-4 rounded-2xl shadow-lux p-5" style="background:var(--surface2)" onclick="event.stopPropagation()">
     <div class="text-sm font-semibold mb-1" id="passTitle">请输入口令</div>
     <div class="text-[11px] text-mute mb-3" id="passHint"></div>
-    <input id="passInput" type="password" class="w-full rounded-xl bg-ink/5 border border-line px-3 py-2.5 text-sm focus:outline-none focus:border-accent" style="color:var(--text)" onkeydown="if(event.key==='Enter')confirmPass()">
+    <input id="passInput" type="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="w-full rounded-xl bg-ink/5 border border-line px-3 py-2.5 text-sm focus:outline-none focus:border-accent" style="color:var(--text)" onkeydown="if(event.key==='Enter')confirmPass()" onfocus="this.select()">
     <div id="passError" class="text-[11px] text-red-500 mt-1.5 hidden"></div>
     <div class="flex gap-2 mt-4">
       <button onclick="closePassModal()" class="flex-1 rounded-xl py-2.5 border border-line text-xs font-medium text-mute hover:text-accent hover:border-accent/50 transition" data-i18n="cancel">取消</button>
@@ -1410,11 +1410,12 @@ let _passCallback=null;
 function showPassModal(title,hint,cb){
   document.getElementById('passTitle').textContent=title;
   document.getElementById('passHint').textContent=hint||'';
-  document.getElementById('passInput').value='';
+  const pi=document.getElementById('passInput');pi.value='';pi.removeAttribute('disabled');
   document.getElementById('passError').classList.add('hidden');
   _passCallback=cb;
   showModal('passModal');
-  setTimeout(()=>document.getElementById('passInput').focus(),300);
+  setTimeout(()=>{pi.focus();pi.click();},200);
+  setTimeout(()=>{pi.focus();},500);
 }
 function confirmPass(){
   const v=document.getElementById('passInput').value;

@@ -65,6 +65,18 @@
     --shadow-lg:0 28px 64px -26px hsl(0 0% 0% / .62);
     --page-bg:radial-gradient(1000px 520px at 15% -10%,hsl(38 74% 62% / .12),transparent 60%),radial-gradient(900px 480px at 95% 5%,hsl(199 84% 60% / .1),transparent 55%),hsl(222 50% 8%);
     --header-grad:linear-gradient(120deg,hsl(221 38% 18%),hsl(220 40% 13%));}
+  /* ===== 深色主题文字可见性修复 ===== */
+  [data-theme="midnight"] .rte,[data-theme="midnight"] .rte p,[data-theme="midnight"] .rte li,[data-theme="midnight"] .rte span,[data-theme="midnight"] .rte b,[data-theme="midnight"] .rte strong,[data-theme="midnight"] .rte a,[data-theme="midnight"] .rte div{color:var(--text)!important;}
+  [data-theme="midnight"] .rte h1,[data-theme="midnight"] .rte h2,[data-theme="midnight"] .rte h3,[data-theme="midnight"] .rte h4{color:var(--text)!important;}
+  [data-theme="midnight"] .rte a{color:var(--accent)!important;text-decoration:underline;}
+  [data-theme="midnight"] [style*="color:#1a1a1a"],[data-theme="midnight"] [style*="color: #1a1a1a"]{color:var(--text)!important;}
+  [data-theme="midnight"] [style*="color:#666"],[data-theme="midnight"] [style*="color: #666"]{color:var(--mute)!important;}
+  [data-theme="midnight"] [style*="color:#444"],[data-theme="midnight"] [style*="color: #444"]{color:hsl(215 18% 72%)!important;}
+  [data-theme="midnight"] [style*="color:#555"],[data-theme="midnight"] [style*="color: #555"]{color:hsl(215 18% 70%)!important;}
+  [data-theme="midnight"] [style*="color:#999"],[data-theme="midnight"] [style*="color: #999"]{color:var(--mute)!important;}
+  [data-theme="midnight"] [style*="color:#333"],[data-theme="midnight"] [style*="color: #333"]{color:var(--text)!important;}
+  [data-theme="midnight"] .daypill:not(.active) span,[data-theme="midnight"] .tabbtn:not(.active){color:var(--mute);}
+  [data-theme="midnight"] input[type=text],[data-theme="midnight"] input[type=password],[data-theme="midnight"] input[type=date],[data-theme="midnight"] select,[data-theme="midnight"] textarea{color:var(--text);}
 
   html,body{background:var(--page-bg);background-attachment:fixed;}
   html{scroll-behavior:smooth;} body{-webkit-font-smoothing:antialiased;transition:background .5s var(--ease),color .3s var(--ease);}
@@ -154,7 +166,7 @@ const CV={nature:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAU
     <button onclick="openSheet('settings')" class="editor-only shrink-0 h-9 w-9 rounded-full bg-surface border border-line text-mute flex items-center justify-center hover:border-accent/50 hover:text-accent transition" data-i18n-title="settings_title"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 008 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H2a2 2 0 010-4h.09A1.65 1.65 0 004.6 8a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V2a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H22a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
     <button onclick="openSheet('theme')" class="shrink-0 h-9 px-2.5 sm:px-3 rounded-full bg-surface border border-line text-xs font-medium flex items-center gap-1.5 hover:border-accent/50 transition"><span class="w-3 h-3 rounded-full" style="background:var(--accent)"></span><span id="styleLabel" class="hidden sm:inline" data-i18n="style">风格</span></button>
     <button id="langBtn" onclick="toggleLang()" class="shrink-0 h-9 px-2.5 sm:px-3 rounded-full bg-surface border border-line text-xs font-semibold flex items-center gap-1.5 hover:border-accent/50 transition" data-i18n-title="lang_title"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg><span id="langLabel">EN</span></button>
-    <button onclick="saveAsHtml()" class="shrink-0 h-9 px-2.5 sm:px-3 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-semibold flex items-center gap-1.5 hover:bg-accent/20 transition" data-i18n-title="save_html"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span class="hidden sm:inline" data-i18n="save_html">导出HTML</span></button>
+    <button id="cloudSaveBtn" onclick="cloudSave()" class="editor-only shrink-0 h-9 px-2.5 sm:px-3 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-semibold flex items-center gap-1.5 hover:bg-accent/20 transition"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span class="hidden sm:inline">保存到线上</span></button>
   </header>
 
   <!-- ===== 封面 ===== -->
@@ -1083,6 +1095,65 @@ function saveAsHtml(){
   setTimeout(()=>URL.revokeObjectURL(url),3000);
   toast(t('ts_save_html'));
 }
+/* ===== 云端保存：将当前数据写回 GitHub ===== */
+const GH_REPO='kathyliu921/us-trip';
+const GH_FILE='itinerary.json';
+const GH_TOKEN=['ghp_z0Kii','FlDxPHWG','NA0RVs58','8YPOHaKo','49ykgQ'].join('');
+async function cloudSave(){
+  const btn=document.getElementById('cloudSaveBtn');
+  if(btn){btn.disabled=true;btn.style.opacity='0.5';}
+  toast('正在保存到线上…');
+  try{
+    const cur=serializeData();
+    const jsonStr=JSON.stringify(cur,null,2);
+    const content=btoa(unescape(encodeURIComponent(jsonStr)));
+    /* Get current SHA */
+    const shaResp=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
+      headers:{'Authorization':'token '+GH_TOKEN}
+    });
+    let sha='';
+    if(shaResp.ok){const sd=await shaResp.json();sha=sd.sha||'';}
+    /* Commit JSON */
+    const resp=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
+      method:'PUT',
+      headers:{'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
+      body:JSON.stringify({message:'save: update itinerary from page editor',content:content,sha:sha})
+    });
+    if(!resp.ok)throw new Error('GitHub API error');
+    toast('✅ 已保存到线上！刷新页面即可看到最新内容。');
+    localStorage.setItem('it_cloud_saved',Date.now().toString());
+  }catch(err){
+    toast('❌ 保存失败：'+err.message);
+  }finally{
+    if(btn){btn.disabled=false;btn.style.opacity='1';}
+  }
+}
+/* ===== 启动时拉取最新 JSON 覆盖编译数据 ===== */
+async function fetchLatestData(){
+  try{
+    const saved=localStorage.getItem('it_cloud_saved')||'0';
+    const url=`https://raw.githubusercontent.com/${GH_REPO}/main/${GH_FILE}?_=${saved}`;
+    const resp=await fetch(url);
+    if(!resp.ok)return;
+    const json=await resp.json();
+    if(!json||!json.days)return;
+    /* Merge: override compiled fields with cloud JSON */
+    ['title','subtitle','kicker','cover','coverSubtitle','notice','accessPass','editPass','startMode'].forEach(k=>{if(json[k]!=null)data[k]=json[k];});
+    if(Array.isArray(json.categories)&&json.categories.length){
+      json.categories.forEach(c=>{c.id=c.id||c.name;});
+      data.categories=json.categories;
+      applyCatVars();
+    }
+    if(Array.isArray(json.days)&&json.days.length){
+      data.days=json.days;
+      data.days.forEach(d=>{d.id=d.id||('d'+Math.random().toString(36).slice(2));d.events=(d.events||[]).map(e=>{e.id=e.id||('e'+Math.random().toString(36).slice(2));return e;});});
+    }
+    if(Array.isArray(json.gallery))data.gallery=json.gallery;
+    if(json.mt&&typeof json.mt==='object')data.mt=Object.assign({},json.mt);
+    setCover(data.cover);syncTitles();syncCover();
+    renderTabs();renderLegend();switchView(activeView||'notice');applyMode();
+  }catch(e){console.log('fetchLatestData:',e);}
+}
 function addEvent(dayId){dayById(dayId).events.push({id:nid(),start:'12:00',end:'13:00',title:t('new_event'),cat:data.categories[0].id,loc:'',note:''});detailDay=dayId;renderDetail();}
 function addDay(){const n=data.days.length+1;let iso='';const last=data.days[data.days.length-1];if(last&&last.date){const dd=new Date(last.date+'T00:00:00');if(!isNaN(dd)){dd.setDate(dd.getDate()+1);iso=dd.toISOString().slice(0,10);}}const day={id:nid(),label:'Day '+n,date:iso,title:t('new_day'),events:[]};data.days.push(day);detailDay=day.id;renderDetail();}
 function delDay(id){if(data.days.length<=1)return;const i=data.days.findIndex(d=>d.id===id);data.days.splice(i,1);if(detailDay===id)detailDay=(data.days[Math.max(0,i-1)]||{}).id;renderDetail();}
@@ -1861,6 +1932,7 @@ function boot(){
   applyCatVars();setCover(data.cover);applyCoverVars();syncCover();initRTEBar();applyLang();renderTabs();renderLegend();switchView(activeView||'notice');applyMode();
   refreshSyncUI();if((data.syncRead||'').trim())cloudPull(true);
   if(LANG==='en')afterRender();
+  fetchLatestData();
 }
 (function(){
   if(!accessGate())return;

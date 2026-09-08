@@ -764,7 +764,17 @@ async function translateView(){
   collectTextNodes(document.body).forEach(n=>{const s=n.nodeValue.trim();if(data.mt[s]!=null)applyNode(n,data.mt[s]);});
 }
 function applyNode(n,en){const v=n.nodeValue;const lead=v.match(/^\s*/)[0],tail=v.match(/\s*$/)[0];n.nodeValue=lead+en+tail;}
-function afterRender(){if(LANG==='en')translateView();if(typeof wrapRteImgs==='function')wrapRteImgs();}
+function afterRender(){if(LANG==='en')translateView();if(typeof wrapRteImgs==='function')wrapRteImgs();bindPreviewClicks();}
+function bindPreviewClicks(){
+  document.querySelectorAll('[data-preview-img]').forEach(function(el){
+    if(el._pb)return;el._pb=1;
+    el.addEventListener('click',function(ev){ev.stopPropagation();var src=this.dataset.previewImg||this.dataset.src||this.getAttribute('src');if(src&&typeof openImgPreview==='function')openImgPreview(src);});
+  });
+  document.querySelectorAll('[data-preview-file]').forEach(function(el){
+    if(el._pb)return;el._pb=1;
+    el.addEventListener('click',function(ev){ev.stopPropagation();var rk=this.dataset.previewFile;if(window._FR&&window._FR[rk]){previewFile(window._FR[rk].d,window._FR[rk].n,this.dataset.canDownload!=='false');}});
+  });
+}
 /* 渲染时即时翻译（同步，不依赖 DOM walker） */
 function tr(s){if(LANG!=='en'||!s)return s;const k=s.trim();return data.mt[k]||s;}
 
@@ -1115,14 +1125,21 @@ function previewFile(dataUrl,filename,canDownload){
     const a=document.createElement('a');a.href=dataUrl;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);
   }
 }
-/* ── 全局事件委托：图片/附件点击预览（防止 contenteditable 等干扰）── */
-document.addEventListener('click',function(ev){
-  if(typeof mode!=='undefined'&&mode==='edit')return;
+/* ── 全局事件委托：图片/附件点击预览（始终生效，防止 contenteditable 等干扰）── */
+function _previewDelegate(ev){
   var el=ev.target.closest?ev.target.closest('[data-preview-img]'):null;
   if(el){ev.preventDefault();ev.stopPropagation();var src=el.dataset.previewImg||el.dataset.src||el.getAttribute('src');if(src&&typeof openImgPreview==='function')openImgPreview(src);return;}
   var fel=ev.target.closest?ev.target.closest('[data-preview-file]'):null;
-  if(fel){ev.preventDefault();ev.stopPropagation();var rk=fel.dataset.previewFile;if(window._FR&&window._FR[rk]){if(typeof previewFile==='function')previewFile(window._FR[rk].d,window._FR[rk].n,fel.dataset.canDownload!=='false');}else{console.error('[preview] _FR registry miss:',rk);}return;}
-},true);
+  if(fel){ev.preventDefault();ev.stopPropagation();var rk=fel.dataset.previewFile;if(window._FR&&window._FR[rk]){if(typeof previewFile==='function')previewFile(window._FR[rk].d,window._FR[rk].n,fel.dataset.canDownload!=='false');}else{console.error('[preview] _FR miss:',rk);}return;}
+}
+document.addEventListener('click',_previewDelegate,true);
+document.addEventListener('touchend',function(ev){
+  var t=ev.target;if(!t)return;
+  var el=t.closest?t.closest('[data-preview-img]'):null;
+  if(el){ev.preventDefault();var src=el.dataset.previewImg||el.dataset.src||el.getAttribute('src');if(src&&typeof openImgPreview==='function'){setTimeout(function(){openImgPreview(src);},50);}return;}
+  var fel=t.closest?t.closest('[data-preview-file]'):null;
+  if(fel){ev.preventDefault();var rk=fel.dataset.previewFile;if(window._FR&&window._FR[rk]){setTimeout(function(){previewFile(window._FR[rk].d,window._FR[rk].n,fel.dataset.canDownload!=='false');},50);}return;}
+},false);
 /* ── 画廊操作 ── */
 function onGalleryUpload(eid,input){if(!input.files||!input.files.length)return;const ev=evById(eid);if(!ev)return;if(!ev.gallery)ev.gallery=[];const files=Array.from(input.files);let loaded=0;files.forEach(f=>{const reader=new FileReader();reader.onload=function(e){ev.gallery.push(e.target.result);loaded++;if(loaded===files.length)renderDetail();};reader.readAsDataURL(f);});}
 function delGalleryImg(eid,idx){const ev=evById(eid);if(!ev)return;if(ev.img&&idx===0){ev.img='';return;}const gi=ev.img?idx-1:idx;if(!ev.gallery)return;ev.gallery.splice(gi,1);renderDetail();}

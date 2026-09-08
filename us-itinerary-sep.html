@@ -513,7 +513,7 @@ function normalizeData(u,base){
   ['dingtalkUrl','accessPass','editPass','startMode','syncRead'].forEach(k=>{if(u[k]!=null)d[k]=u[k];});
   if(Array.isArray(u.categories)&&u.categories.length)d.categories=u.categories.map(c=>({id:c.id||nid(),name:c.name||'',color:c.color||'#2563EB',...(c.hidden?{hidden:true}:{})}));
   if(Array.isArray(u.days)&&u.days.length)d.days=u.days.map(dd=>({id:nid(),label:dd.label||'',date:dd.date||'',title:dd.title||'',
-    events:(dd.events||[]).map(e=>({id:nid(),start:e.start||'',end:e.end||'',title:e.title||'',cat:e.cat||(d.categories[0]&&d.categories[0].id)||'visit',loc:e.loc||'',addr:e.addr||'',note:e.note||'',...(e.people?{people:e.people}:{}),...(e.agenda?{agenda:e.agenda}:{}),...(e.gallery?{gallery:e.gallery}:{}),...(e.companyDesc?{companyDesc:e.companyDesc}:{})}))}));
+    events:(dd.events||[]).map(e=>({id:nid(),start:e.start||'',end:e.end||'',title:e.title||'',cat:e.cat||(d.categories[0]&&d.categories[0].id)||'visit',loc:e.loc||'',addr:e.addr||'',note:e.note||'',...(e.img?{img:e.img}:{}),...(e.people?{people:e.people}:{}),...(e.agenda?{agenda:e.agenda}:{}),...(e.gallery?{gallery:e.gallery}:{}),...(e.companyDesc?{companyDesc:e.companyDesc}:{})}))}));
   if(Array.isArray(u.gallery))d.gallery=u.gallery;
   if(u.mt&&typeof u.mt==='object')d.mt=Object.assign({},u.mt);
   return d;

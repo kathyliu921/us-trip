@@ -902,7 +902,7 @@ function renderCalendar(){
     }).join('');
     const dShort=fmtShort(d.date)||'';
     const wk=fmtDate(d.date)?('· '+fmtDate(d.date).split(' ').pop()):'';
-    return `<div class="flex-1 min-w-[140px] border-l border-line"><div class="h-12 flex flex-col items-center justify-center border-b border-line sticky top-0 z-10" style="background:linear-gradient(135deg,#2d3748,#1a202c)"><span class="text-[13px] font-extrabold tracking-wide text-white leading-tight">${d.label}</span><span class="text-[10px] font-semibold text-white/80 leading-tight">${dShort} ${wk}</span></div><div class="relative cal-grid" style="height:${(CAL_END-CAL_START+1)*ROW}px">${evs}</div></div>`;
+    return `<div class="flex-1 border-l border-line"><div class="h-12 flex flex-col items-center justify-center border-b border-line sticky top-0 z-10" style="background:linear-gradient(135deg,#2d3748,#1a202c)"><span class="text-[12px] font-extrabold tracking-wide text-white leading-tight">${d.label}</span><span class="text-[10px] font-semibold text-white/80 leading-tight">${dShort} ${wk}</span></div><div class="relative cal-grid" style="height:${(CAL_END-CAL_START+1)*ROW}px">${evs}</div></div>`;
   }).join('');
   const fBtn=(k,l)=>`<button onclick="calShowFields.${k}=!calShowFields.${k};renderCalendar()" class="text-[11px] rounded-md px-2 py-1 border transition ${calShowFields[k]?'bg-accent/15 border-accent/40 text-accent':'border-line text-mute'}">${l}</button>`;
   document.getElementById('view-calendar').innerHTML=`
@@ -911,7 +911,7 @@ function renderCalendar(){
       <label class="text-[11px] text-mute flex items-center gap-1.5">${t('cal_range')}
         <select onchange="var v=this.value.split('-');CAL_START=+v[0];CAL_END=+v[1];renderCalendar()" class="rounded-lg bg-surface border border-line px-2 py-1">
           <option value="8-22" ${CAL_START==8?'selected':''}>08:00–22:00</option><option value="7-23" ${CAL_START==7?'selected':''}>07:00–23:00</option><option value="6-24" ${CAL_START==6?'selected':''}>06:00–24:00</option></select></label></div>
-    <div class="rounded-2xl bg-surface border border-line shadow-soft overflow-hidden"><div class="overflow-x-auto"><div class="flex min-w-max">${timeCol}${cols}</div></div></div>
+    <div class="rounded-2xl bg-surface border border-line shadow-soft overflow-hidden"><div class="overflow-x-auto"><div class="flex w-full">${timeCol}${cols}</div></div></div>
     <p class="text-[10px] text-mute mt-2 text-center">${t('cal_hint')}</p>`;
 }
 

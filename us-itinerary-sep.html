@@ -883,7 +883,7 @@ function renderSummary(){
 function jumpTo(dayId,evId){
   cameFromSummary=(activeView==='summary');
   cameFromCalendar=(activeView==='calendar');
-  switchView('detail');detailDay=dayId;renderDetail();
+  detailDay=dayId;switchView('detail');
   setTimeout(()=>{const t=evId?document.getElementById('ev-'+evId):null;if(t){t.scrollIntoView({behavior:'smooth',block:'center'});t.animate([{boxShadow:'0 0 0 0 var(--accent)'},{boxShadow:'0 0 0 3px var(--accent)'},{boxShadow:'0 0 0 0 var(--accent)'}],{duration:1200});}},80);}
 
 /* ===== 日历概览 ===== */
@@ -1302,10 +1302,7 @@ async function fetchLatestData(){
       data.categories=json.categories;
       applyCatVars();
     }
-    if(Array.isArray(json.days)&&json.days.length){
-      data.days=json.days;
-      data.days.forEach(d=>{d.id=d.id||('d'+Math.random().toString(36).slice(2));d.events=(d.events||[]).map(e=>{e.id=e.id||('e'+Math.random().toString(36).slice(2));return e;});});
-    }
+    /* 不替换 data.days — 编译数据已含正确 ID，替换会导致日历点击跳转失败 */
     if(Array.isArray(json.gallery))data.gallery=json.gallery;
     if(json.mt&&typeof json.mt==='object')data.mt=Object.assign({},json.mt);
     setCover(data.cover);syncTitles();syncCover();

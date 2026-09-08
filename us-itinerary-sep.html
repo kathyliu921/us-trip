@@ -762,8 +762,8 @@ function tr(s){if(LANG!=='en'||!s)return s;const k=s.trim();return data.mt[k]||s
    视图 + 可拖拽标签
    ========================================================= */
 const VIEWS={summary:{i18n:'v_summary',fn:renderSummary},notice:{i18n:'v_notice',fn:renderNotice},calendar:{i18n:'v_calendar',fn:renderCalendar},detail:{i18n:'v_detail',fn:renderDetail},poster:{i18n:'v_poster',fn:openPoster,modal:true},gallery:{i18n:'v_gallery',fn:renderGallery}};
-let viewOrder=['notice','calendar','detail'];
-let activeView='notice'; const openDays=new Set();
+let viewOrder=['poster','notice','calendar','detail'];
+let activeView='poster'; const openDays=new Set();
 const tabLabel=v=>VIEWS[v].custom||t(VIEWS[v].i18n);
 let tabSortable=null;
 function renderTabs(){
@@ -1972,7 +1972,6 @@ function boot(){
   refreshSyncUI();if((data.syncRead||'').trim())cloudPull(true);
   if(LANG==='en')afterRender();
   fetchLatestData();
-  setTimeout(()=>{try{openPoster()}catch(e){console.warn('openPoster failed:',e)}},800);
 }
 (function(){
   if(!accessGate())return;

@@ -4,8 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#FBF8F1" />
-<title>US Itinerary - Sep</title>
+<title>US Itinerary - Sep</title><!-- build:1788830501 -->
 <meta name="description" content="点击查看行程手册" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1046,9 +1049,12 @@ function delAgendaFile(eid,agendaIdx,fileIdx){const ev=evById(eid);if(!ev||!ev.a
 function updAgendaRTE(eid,idx,el){const ev=evById(eid);if(ev&&ev.agenda&&ev.agenda[idx]){ev.agenda[idx].note=el.innerHTML;}}
 /* ── 文件预览（模态弹窗 + iframe + 另存为）── */
 function previewFile(dataUrl,filename,canDownload){
+  console.log('[DEBUG] previewFile called, filename:', filename, 'dataUrl type:', typeof dataUrl, 'dataUrl length:', (dataUrl||'').length, 'prefix:', (dataUrl||'').substring(0,50));
+  if(!dataUrl){console.error('[DEBUG] previewFile: dataUrl is empty/undefined!');return;}
   if(canDownload===undefined)canDownload=true;
   const ext=(filename.split('.').pop()||'').toLowerCase();
   const isPdf=ext==='pdf';
+  console.log('[DEBUG] previewFile: ext:', ext, 'isPdf:', isPdf);
   /* Convert base64 data URI or raw base64 → Blob URL */
   let blobUrl;
   try{
@@ -1069,7 +1075,8 @@ function previewFile(dataUrl,filename,canDownload){
     for(let j=0;j<raw.length;j++)ia[j]=raw.charCodeAt(j);
     const blob=new Blob([ia],{type:mt});
     blobUrl=URL.createObjectURL(blob);
-  }catch(e){blobUrl=null;}
+    console.log('[DEBUG] previewFile: blob created, size:', blob.size, 'type:', mt, 'blobUrl:', blobUrl);
+  }catch(e){console.error('[DEBUG] previewFile: blob conversion failed:', e.message, e);blobUrl=null;}
 
   if(isPdf&&blobUrl){
     window._pfBlobUrl=blobUrl;window._pfSrc=dataUrl;window._pfName=filename;
@@ -1102,8 +1109,10 @@ function onGalleryUpload(eid,input){if(!input.files||!input.files.length)return;
 function delGalleryImg(eid,idx){const ev=evById(eid);if(!ev)return;if(ev.img&&idx===0){ev.img='';return;}const gi=ev.img?idx-1:idx;if(!ev.gallery)return;ev.gallery.splice(gi,1);renderDetail();}
 /* ── 图片灯箱 ── */
 function openImgPreview(src,filename){
+  console.log('[DEBUG] openImgPreview called, src type:', typeof src, 'src length:', (src||'').length, 'src prefix:', (src||'').substring(0,60));
+  if(!src){console.error('[DEBUG] openImgPreview: src is empty/undefined!');return;}
   window._lbSrc=src;
-  const lb=document.getElementById('lightbox');if(!lb)return;
+  const lb=document.getElementById('lightbox');if(!lb){console.error('[DEBUG] openImgPreview: lightbox element not found!');return;}
   const dlName=filename||'image.png';
   /* Convert data URI → blob URL for reliable Chrome display */
   let displaySrc=src;
@@ -1112,12 +1121,16 @@ function openImgPreview(src,filename){
       const parts=src.split(',');
       const mime=parts[0].match(/:(.*?);/);
       const mt=mime?mime[1]:'image/png';
+      console.log('[DEBUG] openImgPreview: converting data URI, mime:', mt, 'b64 length:', (parts[1]||'').length);
       const b64=atob(parts[1]);
       const ia=new Uint8Array(b64.length);
       for(let j=0;j<b64.length;j++)ia[j]=b64.charCodeAt(j);
       displaySrc=URL.createObjectURL(new Blob([ia],{type:mt}));
+      console.log('[DEBUG] openImgPreview: blob URL created:', displaySrc);
+    } else {
+      console.log('[DEBUG] openImgPreview: src is NOT a data URI, using as-is');
     }
-  }catch(e){displaySrc=src;}
+  }catch(e){console.error('[DEBUG] openImgPreview: blob conversion failed:', e);displaySrc=src;}
   lb.innerHTML=`<div class="flex items-center justify-between px-4 py-2">
     <div class="flex items-center gap-2">
       <button onclick="(function(){var a=document.createElement('a');a.href=window._lbSrc;a.download='${dlName.replace(/'/g,"\\'")}';document.body.appendChild(a);a.click();document.body.removeChild(a);})()" class="h-8 px-3 rounded-full bg-white/10 text-white flex items-center gap-1.5 hover:bg-white/20 text-xs transition"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>${t('save')||'保存'}</button>
@@ -1959,7 +1972,7 @@ function boot(){
   refreshSyncUI();if((data.syncRead||'').trim())cloudPull(true);
   if(LANG==='en')afterRender();
   fetchLatestData();
-  setTimeout(()=>{if(!activeView)openPoster()},600);
+  setTimeout(()=>{try{openPoster()}catch(e){console.warn('openPoster failed:',e)}},800);
 }
 (function(){
   if(!accessGate())return;

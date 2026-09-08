@@ -1770,7 +1770,7 @@ function renderPoster(){
   const catName=e=>cm[e.cat]?esc(cm[e.cat].name):'';
   const catCol=e=>cm[e.cat]?cm[e.cat].color:'#999';
   const chip=(e,dark)=>M.cat&&cm[e.cat]?`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;border-radius:99px;padding:2px 10px;background:${catCol(e)}${dark?'2E':'1C'};color:${dark?'#fff':catCol(e)}"><span style="width:6px;height:6px;border-radius:99px;background:${catCol(e)}"></span>${catName(e)}</span>`:'';
-  const loc=(e,c)=>M.loc&&e.loc&&e.loc!=='—'?`<span style="font-size:12px;color:${c||(p.mut)}">↳ ${esc(e.loc)}</span>`:'';
+  const loc=(e,c)=>{if(!M.loc)return '';const hasLoc=e.loc&&e.loc!=='—';const hasAddr=e.addr&&e.addr!=='—'&&e.addr!==e.loc;if(!hasLoc&&!hasAddr)return '';return `<span style="font-size:12px;color:${c||(p.mut)};display:block;line-height:1.5">${hasLoc?'↳ '+esc(e.loc):''}${hasAddr?`<span style="display:block;font-size:11px;color:${c||(p.mut)};opacity:.75;margin-top:1px">${hasLoc?' ':''}${esc(e.addr)}</span>`:''}</span>`;};
   const dayTag=(e,c)=>posterState.scope==='all'?`<span style="font-size:11px;color:${c||p.mut};font-weight:600">${esc(e.day)}${e.dayDate?' · '+fmtShort(e.dayDate):''}</span>`:'';
   const note=(e,c)=>M.note&&stripHTML(e.note)?`<div style="font-size:12px;color:${c||p.mut};margin-top:5px;line-height:1.55">${esc(stripHTML(e.note))}</div>`:'';
   const img=(e)=>{if(!M.img)return '';const s=e.img||(e.gallery&&e.gallery[0])||firstImg(e.note);return s?`<div style="margin-top:9px"><img src="${s}" style="width:100%;max-height:150px;object-fit:cover;border-radius:11px;display:block"></div>`:'';};

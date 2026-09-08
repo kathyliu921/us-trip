@@ -1782,7 +1782,7 @@ const tm=(e)=>M.time?(e.end&&e.end!=='—'&&e.end!==e.start?esc(e.start)+'–'+e
   // 按天分组：范围为「单天」时不分组（单组无头），其余（整体/按分类）按天分段
   const grouped=posterState.scope!=='day';
   const groups=(()=>{const map=[],idx={};items.forEach(e=>{const k=e.day||'';if(idx[k]==null){idx[k]=map.length;map.push({day:e.day,date:e.dayDate,items:[]});}map[idx[k]].items.push(e);});return grouped?map:[{day:null,date:null,items}];})();
-  const x={st,p,cm,M,items,head,sub,cover,dayCount,esc,stripHTML,fmtShort,catName,catCol,chip,loc,dayTag,note,img,tm,dots,brand,groups,grouped};
+  const x={st,p,cm,M,items,head,sub,cover,dayCount,esc,stripHTML,fmtShort,catName,catCol,chip,loc,dayTag,note,img,people,agenda,tm,dots,brand,groups,grouped};
   const empty='<div style="text-align:center;color:'+p.mut+';font-size:13px;padding:24px 0">'+t('pt_no_events')+'</div>';
   let shell=({minimal:stMinimal,fresh:stFresh,biz:stBiz,fashion:stFashion}[st.id]||stMinimal)(x,empty);
   document.getElementById('posterCanvas').innerHTML=`<style>.poster{overflow:hidden;box-shadow:0 40px 90px -35px rgba(0,0,0,.55);font-family:var(--font)}.poster *{box-sizing:border-box}</style>${shell}`;

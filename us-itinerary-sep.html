@@ -595,8 +595,8 @@ const I18N={
       p_export_hint:'PNG 无损透明 · JPG 体积小 · PDF 可打印分享',
       scope_all:'整体',scope_day:'按天',scope_cat:'按分类',
       mod_time:'时间',mod_loc:'地点',mod_cat:'分类标签',mod_img:'配图',mod_people:'嘉宾',mod_agenda:'议程',
-      st_minimal:'简约',st_minimal_sc:'通用 · 高管',st_fresh:'轻快',st_fresh_sc:'出行 · 访问',
-      st_biz:'商务',st_biz_sc:'差旅 · 峰会',st_fashion:'时尚',st_fashion_sc:'活动 · 潮流',
+      st_minimal:'简约',st_fresh:'商务·简约',
+      st_biz:'商务',st_fashion:'科技·时尚',
       ps_gen:'正在生成…',ps_pdf_notready:'PDF 组件未就绪，请重试',ps_pdf_done:'PDF 已导出',ps_pdf_fail:'PDF 导出失败，请重试',ps_done:'海报已导出（{f}）',ps_fail:'导出失败，请重试',poster_fname:'行程',poster_suffix:'-海报',
       /* 相册 / 灯箱 */
       copy:'复制',download:'下载',gal_size_s:'小',gal_size_m:'中',gal_size_l:'大',gal_pick:'点击选择图片，支持多选一次导入',gal_empty:'暂无照片',gal_big:'大图',
@@ -651,8 +651,8 @@ const I18N={
       p_export_hint:'PNG lossless · JPG small · PDF printable',
       scope_all:'All',scope_day:'By day',scope_cat:'By category',
       mod_time:'Time',mod_loc:'Location',mod_cat:'Category tag',mod_img:'Photo',mod_people:'Guests',mod_agenda:'Agenda',
-      st_minimal:'Minimal',st_minimal_sc:'General · Exec',st_fresh:'Fresh',st_fresh_sc:'Trip · Visit',
-      st_biz:'Business',st_biz_sc:'Trip · Summit',st_fashion:'Fashion',st_fashion_sc:'Event · Trend',
+      st_minimal:'Minimal',st_fresh:'Business·Minimal',
+      st_biz:'Business',st_fashion:'Tech·Fashion',
       ps_gen:'Generating…',ps_pdf_notready:'PDF engine not ready, retry',ps_pdf_done:'PDF exported',ps_pdf_fail:'PDF export failed, retry',ps_done:'Poster exported ({f})',ps_fail:'Export failed, retry',poster_fname:'Itinerary',poster_suffix:'-poster',
       copy:'Copy',download:'Download',gal_size_s:'S',gal_size_m:'M',gal_size_l:'L',gal_pick:'Tap to choose images — multi-select supported',gal_empty:'No photos yet',gal_big:'Enlarge',
       notice_title:'Important pre-trip notes',notice_desc:'Focus the cursor to use the toolbar: bold, color, highlight, align, indent, list, image, attachment',notice_ph:'Write your pre-trip notes here…',
@@ -1740,24 +1740,14 @@ function renderSheetAdmin(){const el=document.getElementById('sheetContent');el.
    ========================================================= */
 /* 每套「风格」= 版式 + 字体 + 配色 三位一体，每套自带若干「色调」变体。
    设计参考：Apple 极简排版尺度 + 小红书/杂志/商务/时尚行程海报范式。 */
-const posterState={style:'minimal',tone:0,scope:'all',day:0,cat:'',modules:{time:true,loc:true,cat:true,img:false,people:false,agenda:false}};
+const posterState={style:'fresh',tone:0,scope:'all',day:0,cat:'',modules:{time:true,loc:true,cat:true,img:false,people:false,agenda:false}};
 const STYLES=[
-  {id:'minimal',name:'简约',scene:'通用 · 高管',tones:[
-    {name:'石墨',bg:'#ffffff',ink:'#1d1d1f',mut:'#86868b',line:'#e7e7ea',accent:'#1d1d1f'},
-    {name:'科技蓝',bg:'#ffffff',ink:'#1d1d1f',mut:'#86868b',line:'#e7e7ea',accent:'#2563EB'},
-    {name:'极光绿',bg:'#ffffff',ink:'#1d1d1f',mut:'#86868b',line:'#e7e7ea',accent:'#0E9F6E'},
-  ]},
-  {id:'fresh',name:'轻快',scene:'出行 · 访问',cover:true,tones:[
+  {id:'fresh',name:'商务·简约',cover:true,tones:[
     {name:'暖阳',bg:'#FFF8F1',ink:'#3A2E26',mut:'#A2917F',line:'#F1E7DA',accent:'#EA6A47'},
     {name:'晴海',bg:'#F1F7FB',ink:'#1E3244',mut:'#7F94A4',line:'#E1ECF3',accent:'#2E86C1'},
     {name:'青野',bg:'#F3F8EF',ink:'#26352A',mut:'#8A9A82',line:'#E4EEDC',accent:'#4E9C63'},
   ]},
-  {id:'biz',name:'商务',scene:'差旅 · 峰会',tones:[
-    {name:'藏青金',bg:'#ffffff',ink:'#18233A',mut:'#6B7688',line:'#E7ECF2',accent:'#C29B45',g1:'#101E3A',g2:'#294470'},
-    {name:'石墨绿',bg:'#ffffff',ink:'#1A2622',mut:'#6C7A74',line:'#E6EDE9',accent:'#3E9C7A',g1:'#122A24',g2:'#25493E'},
-    {name:'铁灰红',bg:'#ffffff',ink:'#20242B',mut:'#727884',line:'#E8EAEE',accent:'#D0453B',g1:'#1B1E24',g2:'#3A404B'},
-  ]},
-  {id:'fashion',name:'时尚',scene:'活动 · 潮流',cover:true,tones:[
+  {id:'fashion',name:'科技·时尚',cover:true,tones:[
     {name:'荧绿',bg:'#0A0D0C',ink:'#ffffff',mut:'#AEB8B4',line:'#ffffff22',accent:'#25F5A5'},
     {name:'霓黄',bg:'#0B0B0C',ink:'#ffffff',mut:'#B8B8BE',line:'#ffffff22',accent:'#E8FF3A'},
     {name:'亮粉',bg:'#0C090B',ink:'#ffffff',mut:'#BDB2B7',line:'#ffffff22',accent:'#FF3D7F'},
@@ -1769,7 +1759,7 @@ let _posterCfgOpen=true;
 function togglePosterCfg(){_posterCfgOpen=!_posterCfgOpen;const cfg=document.getElementById('posterCfg');const btn=document.getElementById('posterCfgToggle');const svg=btn.querySelector('svg');cfg.style.display=_posterCfgOpen?'':'none';svg.style.transform=_posterCfgOpen?'':'rotate(180deg)';btn.querySelector('span').textContent=_posterCfgOpen?t('p_toggle_cfg'):t('p_show_cfg');}
 function openPoster(){posterState.cat=posterState.cat||data.categories[0].id;
   drawStyle();drawTone();buildPC();renderPoster();showModal('posterModal');}
-function drawStyle(){document.getElementById('pTemplate').innerHTML=STYLES.map(s=>{const on=posterState.style===s.id;return `<button onclick="posterState.style='${s.id}';posterState.tone=0;drawStyle();drawTone();renderPoster()" class="text-left rounded-xl px-3 py-2.5 border transition ${on?'bg-accent text-white border-accent shadow-soft':'bg-ink/5 text-ink border-line hover:border-accent/40'}"><div class="text-[13px] font-semibold leading-tight">${t('st_'+s.id)}</div><div class="text-[10px] mt-0.5 ${on?'text-white/80':'text-mute'}">${t('st_'+s.id+'_sc')}</div></button>`;}).join('');}
+function drawStyle(){document.getElementById('pTemplate').innerHTML=STYLES.map(s=>{const on=posterState.style===s.id;return `<button onclick="posterState.style='${s.id}';posterState.tone=0;drawStyle();drawTone();renderPoster()" class="text-center rounded-xl px-3 py-3 border transition ${on?'bg-accent text-white border-accent shadow-soft':'bg-ink/5 text-ink border-line hover:border-accent/40'}"><div class="text-[13px] font-semibold leading-tight">${t('st_'+s.id)}</div></button>`;}).join('');}
 function drawTone(){const s=curStyle();document.getElementById('pPalette').innerHTML=s.tones.map((t,i)=>{const on=i===posterState.tone;const sw=t.g1?`linear-gradient(135deg,${t.g1},${t.g2})`:(t.accent);return `<button onclick="posterState.tone=${i};drawTone();renderPoster()" title="${t.name}" class="flex flex-col items-center gap-1 group"><span class="w-9 h-9 rounded-full border-2 transition group-hover:scale-105 ${on?'border-ink':'border-transparent'}" style="background:${sw}"></span><span class="text-[9px] ${on?'text-ink font-semibold':'text-mute'}">${t.name}</span></button>`;}).join('');}
 function drawScope(){document.getElementById('pScope').innerHTML=[['all','scope_all'],['day','scope_day'],['cat','scope_cat']].map(([v,n])=>`<button onclick="posterState.scope='${v}';buildPC();renderPoster()" class="text-xs rounded-lg py-2 border transition ${posterState.scope===v?'bg-accent text-white border-accent':'bg-ink/5 text-mute border-line'}">${t(n)}</button>`).join('');}
 function buildPC(){const p=document.getElementById('pScopePick');drawScope();
@@ -1808,7 +1798,7 @@ const tm=(e)=>M.time?(e.end&&e.end!=='—'&&e.end!==e.start?esc(e.start)+'–'+e
   const groups=(()=>{const map=[],idx={};items.forEach(e=>{const k=e.day||'';if(idx[k]==null){idx[k]=map.length;map.push({day:e.day,date:e.dayDate,items:[]});}map[idx[k]].items.push(e);});return grouped?map:[{day:null,date:null,items}];})();
   const x={st,p,cm,M,items,head,sub,cover,dayCount,esc,stripHTML,fmtShort,catName,catCol,chip,loc,dayTag,note,img,people,agenda,tm,dots,brand,groups,grouped};
   const empty='<div style="text-align:center;color:'+p.mut+';font-size:13px;padding:24px 0">'+t('pt_no_events')+'</div>';
-  let shell=({minimal:stMinimal,fresh:stFresh,biz:stBiz,fashion:stFashion}[st.id]||stMinimal)(x,empty);
+  let shell=({minimal:stMinimal,fresh:stFresh,biz:stBiz,fashion:stFashion}[st.id]||stFresh)(x,empty);
   document.getElementById('posterCanvas').innerHTML=`<style>.poster{overflow:hidden;box-shadow:0 40px 90px -35px rgba(0,0,0,.55);font-family:var(--font)}.poster *{box-sizing:border-box}</style>${shell}`;
 }
 /* ① 简约 —— Apple 式：纯白、超大标题、序号索引、极致留白、发丝分隔线 */

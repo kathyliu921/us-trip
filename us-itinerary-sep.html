@@ -130,6 +130,8 @@
   .timeInput{color-scheme:light;border:1px solid var(--line);border-radius:8px;padding:1px 6px;background:color-mix(in srgb,var(--accent) 6%,transparent);transition:var(--t);cursor:pointer;width:auto;max-width:72px;} .timeInput:hover,.timeInput:focus{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);} [data-theme="midnight"] .timeInput{color-scheme:dark;} body.mode-view .timeInput{border-color:transparent;background:transparent;cursor:default;pointer-events:none;max-width:56px;padding:0 2px;} .timeInput::-webkit-calendar-picker-indicator{display:none;} .timeInput::-webkit-datetime-edit-ampm-field{display:none;}
   /* ===== 阅览模式：隐藏所有编辑控件，防误操作 ===== */
   body.mode-view .editor-only{display:none!important;}
+  body.mode-view .rte{cursor:default;-webkit-user-select:text;user-select:text;}
+  body.mode-view .rte:focus{outline:none!important;box-shadow:none!important;}
   body:not(.mode-view) #editEntryBtn{display:none!important;}
   body.mode-view .rte:empty{min-height:0!important;padding:0!important;margin:0!important;}
   body.mode-view .rte:empty:before{content:none!important;}
@@ -1364,7 +1366,7 @@ let curRTE=null;
 document.addEventListener('focusin',e=>{const r=e.target.closest('.rte');if(r){curRTE=r;showBar();}});
 document.addEventListener('click',e=>{const a=e.target.closest('a.rte-attach');if(a&&a.href&&a.href.startsWith('data:')){e.preventDefault();e.stopPropagation();const fn=a.dataset.fn||a.textContent.replace(/^📎\s*/,'').trim();previewFile(a.href,fn);}},true);
 document.addEventListener('focusout',()=>{setTimeout(()=>{const a=document.activeElement;if(!a||(!a.closest('.rte')&&!a.closest('#rteBar'))){hideBar();}},150);});
-function showBar(){const b=document.getElementById('rteBar');b.classList.remove('hidden');b.classList.add('flex');placeBar();}
+function showBar(){if(mode==='view')return;const b=document.getElementById('rteBar');b.classList.remove('hidden');b.classList.add('flex');placeBar();}
 function hideBar(){const b=document.getElementById('rteBar');b.classList.add('hidden');b.classList.remove('flex');closeFore();}
 function placeBar(){
   if(!curRTE)return;const b=document.getElementById('rteBar');

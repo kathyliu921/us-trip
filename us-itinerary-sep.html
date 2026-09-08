@@ -884,7 +884,16 @@ function jumpTo(dayId,evId){
   cameFromSummary=(activeView==='summary');
   cameFromCalendar=(activeView==='calendar');
   detailDay=dayId;switchView('detail');
-  setTimeout(()=>{const t=evId?document.getElementById('ev-'+evId):null;if(t){t.scrollIntoView({behavior:'smooth',block:'center'});t.animate([{boxShadow:'0 0 0 0 var(--accent)'},{boxShadow:'0 0 0 3px var(--accent)'},{boxShadow:'0 0 0 0 var(--accent)'}],{duration:1200});}},80);}
+  setTimeout(()=>{
+    const t=evId?document.getElementById('ev-'+evId):null;
+    if(t){
+      const nav=document.querySelector('#view-detail .sticky');
+      const offset=nav?(nav.offsetHeight+70):130;
+      const y=t.getBoundingClientRect().top+window.pageYOffset-offset;
+      window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+      t.animate([{boxShadow:'0 0 0 0 var(--accent)'},{boxShadow:'0 0 0 3px var(--accent)'},{boxShadow:'0 0 0 0 var(--accent)'}],{duration:1200});
+    }
+  },120);}
 
 /* ===== 日历概览 ===== */
 let CAL_START=8,CAL_END=22; const ROW=44;

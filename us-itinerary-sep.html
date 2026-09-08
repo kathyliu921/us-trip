@@ -1789,13 +1789,14 @@ const tm=(e)=>M.time?(e.end&&e.end!=='—'&&e.end!==e.start?esc(e.start)+'–'+e
 }
 /* ① 简约 —— Apple 式：纯白、超大标题、序号索引、极致留白、发丝分隔线 */
 function stMinimal(x,empty){const {p,groups,head,sub,M,items}=x;
-  const row=(e,i)=>`<div style="display:flex;gap:15px;padding:16px 0;border-bottom:1px solid ${p.line}">
-    <div style="flex:none;width:24px;font-size:12px;font-weight:600;color:${p.mut};font-variant-numeric:tabular-nums;padding-top:4px">${String(i+1).padStart(2,'0')}</div>
-    ${M.time?`<div style="flex:none;width:54px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;padding-top:2px"><div style="font-size:15px;font-weight:600;color:${p.ink}">${x.esc(e.start)}</div>${e.end&&e.end!=='—'&&e.end!==e.start?`<div style="font-size:11.5px;font-weight:500;color:${p.mut};margin-top:1px">${x.esc(e.end)}</div>`:''}</div>`:''}
-    <div style="flex:1;min-width:0">
-      <div style="font-size:17px;font-weight:600;color:${p.ink};line-height:1.3;letter-spacing:-.012em">${x.esc(e.title)}</div>
-      <div style="display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-top:7px">${x.chip(e)}${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
-    </div></div>`;
+  const row=(e,i)=>`<div style="padding:14px 0;border-bottom:1px solid ${p.line}">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      ${M.time?`<span style="font-size:10px;font-weight:700;letter-spacing:.08em;color:${p.accent};background:${p.accent}14;padding:2px 8px;border-radius:4px;font-variant-numeric:tabular-nums">${x.esc(e.start)}${e.end&&e.end!=='—'&&e.end!==e.start?'–'+x.esc(e.end):''}</span>`:''}
+      ${x.chip(e)}
+    </div>
+    <div style="font-size:16px;font-weight:600;color:${p.ink};line-height:1.3;letter-spacing:-.01em;margin-top:6px">${x.esc(e.title)}</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:5px">${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
+  </div>`;
   let gi=0;
   const dhead=g=>x.grouped&&g.day?`<div style="display:flex;align-items:baseline;gap:12px;margin:30px 0 6px"><span style="font-family:var(--font-head);font-size:13px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:${p.accent}">${x.esc(g.day)}</span>${g.date?`<span style="font-size:12px;color:${p.mut};font-variant-numeric:tabular-nums">${x.fmtShort(g.date)}</span>`:''}<span style="flex:1;height:1px;background:${p.line}"></span></div>`:'';
   const body=items.length?groups.map(g=>`${dhead(g)}${g.items.map(e=>row(e,gi++)).join('')}`).join(''):empty;
@@ -1813,16 +1814,14 @@ function stMinimal(x,empty){const {p,groups,head,sub,M,items}=x;
   </div>`;}
 /* ② 休闲 —— 封面大图 hero + 圆角卡片，旅行/outing 氛围 */
 function stFresh(x,empty){const {p,groups,M,head,sub,cover,items}=x;
-  const row=e=>`<div style="display:flex;gap:13px;align-items:stretch;background:linear-gradient(145deg,#ffffff 55%,${p.bg});border-radius:18px;padding:14px 15px;margin-bottom:11px;box-shadow:0 10px 26px ${p.ink}14, 0 1px 3px ${p.ink}08">
-    <div style="flex:none;text-align:center;min-width:44px;display:flex;flex-direction:column;justify-content:center">
-      <div style="font-size:15px;font-weight:800;color:${p.accent};font-variant-numeric:tabular-nums;line-height:1">${M.time?x.esc(e.start):'●'}</div>
-      <div style="font-size:9px;color:${p.mut};margin-top:3px">${M.time?x.esc(e.end):''}</div>
+  const row=e=>`<div style="background:linear-gradient(145deg,#ffffff 55%,${p.bg});border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:0 10px 26px ${p.ink}14, 0 1px 3px ${p.ink}08">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      ${M.time?`<span style="font-size:10px;font-weight:800;color:#fff;background:${p.accent};padding:2px 8px;border-radius:99px;font-variant-numeric:tabular-nums">${x.esc(e.start)}${e.end&&e.end!=='—'&&e.end!==e.start?'–'+x.esc(e.end):''}</span>`:''}
+      ${x.chip(e)}
     </div>
-    <div style="width:1px;background:${p.line}"></div>
-    <div style="flex:1;min-width:0">
-      <div style="font-size:15.5px;font-weight:700;color:${p.ink};line-height:1.3">${x.esc(e.title)}</div>
-      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:6px">${x.chip(e)}${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
-    </div></div>`;
+    <div style="font-size:15px;font-weight:700;color:${p.ink};line-height:1.3;margin-top:5px">${x.esc(e.title)}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
+  </div>`;
   const dhead=g=>x.grouped&&g.day?`<div style="display:flex;align-items:center;gap:9px;margin:6px 0 12px"><span style="background:${p.accent};color:#fff;border-radius:99px;padding:4px 13px;font-size:12px;font-weight:800">${x.esc(g.day)}</span>${g.date?`<span style="font-size:12px;color:${p.mut};font-weight:600">${x.fmtShort(g.date)}</span>`:''}<span style="flex:1;height:1px;background:${p.line}"></span></div>`:'';
   const body=items.length?groups.map(g=>`${dhead(g)}${g.items.map(row).join('')}`).join(''):empty;
   return `<div class="poster" style="width:min(462px,92vw);background:${p.bg};color:${p.ink};border-radius:28px">
@@ -1838,18 +1837,21 @@ function stFresh(x,empty){const {p,groups,M,head,sub,cover,items}=x;
     <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 22px 22px;font-size:11px;color:${p.mut}"><span style="font-weight:700;color:${p.ink}">${x.brand}</span><span style="display:flex;gap:6px;align-items:center">${x.dots()}</span></div>
   </div>`;}
 /* ③ removed (ink) */
-/* ④ 商务 —— 藏青渐变 hero + 白底结构化表 + Day 编号轴 + 金色点缀 */
+/* ④ 商务 —— 藏青渐变 hero + 白底结构化表 + 金色点缀 */
 function stBiz(x,empty){const {p,items,M,head,sub}=x;
   const byDay={};items.forEach(e=>{(byDay[e.day]=byDay[e.day]||[]).push(e);});
   const dayKeys=Object.keys(byDay);
   const body=items.length?dayKeys.map((dk,di)=>{
-    const rows=byDay[dk].map(e=>`<div style="display:flex;gap:14px;padding:11px 0;border-bottom:1px solid ${p.line}">
-      ${M.time?`<div style="flex:none;width:88px;font-size:12.5px;font-weight:700;color:${p.accent};font-variant-numeric:tabular-nums">${x.esc(e.start)}<span style="color:${p.mut};font-weight:400">–${x.esc(e.end)}</span></div>`:''}
-      <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:${p.ink};line-height:1.3">${x.esc(e.title)}</div>
-      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:5px">${x.chip(e)}${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}</div></div>`).join('');
-    return `<div style="display:flex;gap:16px;padding:14px 0">
-      <div style="flex:none;width:44px;text-align:right"><div style="font-family:var(--font-head);font-size:26px;font-weight:800;color:${p.accent};line-height:1">${String(di+1).padStart(2,'0')}</div><div style="font-size:9px;color:${p.mut};margin-top:3px;letter-spacing:.08em">${x.esc(byDay[dk][0].dayDate?fmtShort(byDay[dk][0].dayDate):dk)}</div></div>
-      <div style="flex:1;min-width:0;border-left:2px solid ${p.line};padding-left:16px">${rows}</div>
+    const rows=byDay[dk].map(e=>`<div style="padding:11px 0;border-bottom:1px solid ${p.line}">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        ${M.time?`<span style="font-size:10px;font-weight:700;color:${p.accent};font-variant-numeric:tabular-nums;letter-spacing:.04em">${x.esc(e.start)}${e.end&&e.end!=='—'&&e.end!==e.start?'–'+x.esc(e.end):''}</span>`:''}
+        ${x.chip(e)}
+      </div>
+      <div style="font-size:14.5px;font-weight:700;color:${p.ink};line-height:1.3;margin-top:4px">${x.esc(e.title)}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}</div>`).join('');
+    return `<div style="padding:10px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-family:var(--font-head);font-size:13px;font-weight:800;letter-spacing:.08em;color:${p.accent}">${x.esc(dk)}</span>${byDay[dk][0].dayDate?`<span style="font-size:11px;color:${p.mut};letter-spacing:.04em">${fmtShort(byDay[dk][0].dayDate)}</span>`:''}<span style="flex:1;height:1px;background:${p.line}"></span></div>
+      ${rows}
     </div>`;}).join(''):empty;
   return `<div class="poster" style="width:min(462px,92vw);background:${p.bg};color:${p.ink};border-radius:20px;overflow:hidden">
     <div style="position:relative;padding:34px 32px 30px;background:linear-gradient(135deg,${p.g1},${p.g2});color:#fff;overflow:hidden">

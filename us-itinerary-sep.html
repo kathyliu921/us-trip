@@ -881,6 +881,7 @@ function renderSummary(){
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">${cards}</div>`;
 }
 function jumpTo(dayId,evId){
+  userNavigated=true;
   cameFromSummary=(activeView==='summary');
   cameFromCalendar=(activeView==='calendar');
   detailDay=dayId;switchView('detail');
@@ -927,6 +928,7 @@ function renderCalendar(){
 
 /* ===== 每日详情（横向日选择 · 日期 + 富文本 + 拖拽） ===== */
 let sortables=[]; let detailDay=null; let cameFromSummary=false; let cameFromCalendar=false;
+let userNavigated=false;
 function renderDetail(){
   if(!detailDay||!dayById(detailDay))detailDay=(data.days[0]||{}).id;
   const d=dayById(detailDay);if(!d){document.getElementById('view-detail').innerHTML='';return;}
@@ -1315,7 +1317,9 @@ async function fetchLatestData(){
     if(Array.isArray(json.gallery))data.gallery=json.gallery;
     if(json.mt&&typeof json.mt==='object')data.mt=Object.assign({},json.mt);
     setCover(data.cover);syncTitles();syncCover();
-    renderTabs();renderLegend();switchView(activeView||'notice');applyMode();
+    renderTabs();renderLegend();
+    softRefresh();
+    applyMode();
   }catch(e){console.log('fetchLatestData:',e);}
 }
 function addEvent(dayId){dayById(dayId).events.push({id:nid(),start:'12:00',end:'13:00',title:t('new_event'),cat:data.categories[0].id,loc:'',note:''});detailDay=dayId;renderDetail();}
@@ -1786,7 +1790,7 @@ function renderSheetAdmin(){const el=document.getElementById('sheetContent');el.
    ========================================================= */
 /* 每套「风格」= 版式 + 字体 + 配色 三位一体，每套自带若干「色调」变体。
    设计参考：Apple 极简排版尺度 + 小红书/杂志/商务/时尚行程海报范式。 */
-const posterState={style:'fresh',tone:0,scope:'all',day:0,cat:'',modules:{time:true,loc:true,cat:true,img:true,people:false,agenda:false}};
+const posterState={style:'fresh',tone:0,scope:'all',day:0,cat:'',modules:{time:true,loc:true,cat:true,img:true,people:true,agenda:true}};
 const STYLES=[
   {id:'fresh',name:'商务·简约',cover:true,tones:[
     {name:'暖阳',bg:'#FFF8F1',ink:'#3A2E26',mut:'#A2917F',line:'#F1E7DA',accent:'#EA6A47'},
@@ -1835,7 +1839,7 @@ function renderPoster(){
   const note=(e,c)=>M.note&&stripHTML(e.note)?`<div style="font-size:12px;color:${c||p.mut};margin-top:5px;line-height:1.55">${esc(stripHTML(e.note))}</div>`:'';
   const img=(e)=>{if(!M.img)return '';const imgs=[];if(e.img)imgs.push(e.img);if(e.gallery)for(let gi=0;gi<e.gallery.length&&imgs.length<2;gi++){const gs=e.gallery[gi].src||e.gallery[gi];if(gs&&gs!==e.img)imgs.push(gs);}if(!imgs.length){const fi=firstImg(e.note);if(fi)imgs.push(fi);}if(!imgs.length)return '';if(imgs.length===1)return `<div style="margin-top:9px"><img src="${imgs[0]}" style="width:100%;max-height:150px;object-fit:cover;border-radius:11px;display:block"></div>`;return `<div style="margin-top:9px;display:flex;gap:6px">${imgs.slice(0,2).map(s=>`<img src="${s}" style="flex:1;width:0;max-height:150px;object-fit:cover;border-radius:11px;display:block">`).join('')}</div>`;};
   const people=(e)=>{if(!M.people||!e.people||!e.people.length)return '';const ceoIdx=e.people.findIndex(pp=>/CEO|Founder|Co-founder|联合创始人|创始人|总裁|President/i.test(pp.role||''));const items=e.people.map((pp,i)=>{const isCEO=(i===ceoIdx&&ceoIdx>=0);const photo=pp.img?'<img src="'+pp.img+'" crossorigin="anonymous" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none">':'<div style="width:32px;height:32px;border-radius:50%;background:'+(p.accent||'#888')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none">'+esc((pp.name||'?')[0])+'</div>';return '<div style="display:flex;align-items:flex-start;gap:8px;'+(isCEO?'width:100%':'width:calc(50% - 4px)')+'">'+photo+'<div style="min-width:0"><div style="font-size:12px;font-weight:600;color:'+p.ink+'">'+esc(pp.name||'')+'</div><div style="font-size:10.5px;color:'+p.mut+'">'+esc(pp.role||'')+'</div></div></div>';}).join('');return '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">'+items+'</div>';};
-const agenda=(e)=>{if(!M.agenda||!e.agenda||!e.agenda.length)return '';const items=e.agenda.filter(a=>!a.noBullet).slice(0,5);if(!items.length)return '';return `<div style="margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.03)">${items.map(a=>`<div style="padding:2px 0"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:11px;font-weight:600;color:${p.mut};flex:none;min-width:42px;font-variant-numeric:tabular-nums">${esc(a.time||'')}</span><span style="font-size:12px;color:${p.ink};line-height:1.4">${esc(a.topic||'')}</span></div>${a.speaker?`<div style="margin-left:50px;font-size:10.5px;color:${p.mut};margin-top:1px">${esc(a.speaker)}</div>`:''}</div>`).join('')}</div>`;};
+const agenda=(e)=>{if(!M.agenda||!e.agenda||!e.agenda.length)return '';const items=e.agenda.filter(a=>!a.noBullet);if(!items.length)return '';return `<div style="margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.03)">${items.map(a=>`<div style="padding:2px 0"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:11px;font-weight:600;color:${p.mut};flex:none;min-width:42px;font-variant-numeric:tabular-nums">${esc(a.time||'')}</span><span style="font-size:12px;color:${p.ink};line-height:1.4">${esc(a.topic||'')}</span></div>${a.speaker?`<div style="margin-left:50px;font-size:10.5px;color:${p.mut};margin-top:1px">${esc(a.speaker)}</div>`:''}</div>`).join('')}</div>`;};
 const tm=(e)=>M.time?(e.end&&e.end!=='—'&&e.end!==e.start?esc(e.start)+'–'+esc(e.end):esc(e.start)):'';
   const dots=(c)=>data.categories.slice(0,6).map(x=>`<span style="width:7px;height:7px;border-radius:99px;background:${x.color};display:inline-block"></span>`).join('');
   const brand=esc(data.title);

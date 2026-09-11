@@ -1079,7 +1079,7 @@ function eventCard(dayId,e){const c=catColor(e.cat);
         </div>
       </div>
       <div class="rte text-[14px] leading-relaxed min-h-[1.4em] rounded-lg p-2" data-ph="${t('agenda_ph')}" contenteditable="true" spellcheck="false" oninput="evById('${e.id}').note=this.innerHTML" style="background:color-mix(in srgb,${c} 4%,transparent)">${tr(e.note)||''}</div>
-      ${companyDescHtml}${agendaHtml}${imgHtml}${peopleHtml}
+      ${companyDescHtml}${agendaHtml}${peopleHtml}${imgHtml}
     </div>
   </div>`;
 }

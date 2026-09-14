@@ -600,7 +600,7 @@ const I18N={
       poster_title:'行程海报生成器',p_stylescene:'风格 · 场景',p_tone:'色调',p_scope:'生成范围',p_modules:'内容模块',p_export:'导出',
       p_export_hint:'PNG 无损透明 · JPG 体积小 · PDF 可打印分享',
       scope_all:'整体',scope_day:'按天',scope_cat:'按分类',
-      mod_time:'时间',mod_loc:'地点',mod_cat:'分类标签',mod_img:'配图',mod_people:'嘉宾',mod_agenda:'议程',
+      mod_time:'时间',mod_loc:'地点',mod_cat:'分类标签',mod_img:'配图',mod_people:'嘉宾',mod_bio:'嘉宾简介',mod_company:'企业介绍',mod_agenda:'议程',
       st_minimal:'简约',st_fresh:'商务·简约',
       st_biz:'商务',st_fashion:'科技·时尚',
       ps_gen:'正在生成…',ps_pdf_notready:'PDF 组件未就绪，请重试',ps_pdf_done:'PDF 已导出',ps_pdf_fail:'PDF 导出失败，请重试',ps_done:'海报已导出（{f}）',ps_fail:'导出失败，请重试',poster_fname:'行程',poster_suffix:'-海报',
@@ -656,7 +656,7 @@ const I18N={
       poster_title:'Poster Generator',p_stylescene:'Style · Scene',p_tone:'Tone',p_scope:'Scope',p_modules:'Content',p_export:'Export',
       p_export_hint:'PNG lossless · JPG small · PDF printable',
       scope_all:'All',scope_day:'By day',scope_cat:'By category',
-      mod_time:'Time',mod_loc:'Location',mod_cat:'Category tag',mod_img:'Photo',mod_people:'Guests',mod_agenda:'Agenda',
+      mod_time:'Time',mod_loc:'Location',mod_cat:'Category tag',mod_img:'Photo',mod_people:'Guests',mod_bio:'Bio',mod_company:'Company',mod_agenda:'Agenda',
       st_minimal:'Minimal',st_fresh:'Business·Minimal',
       st_biz:'Business',st_fashion:'Tech·Fashion',
       ps_gen:'Generating…',ps_pdf_notready:'PDF engine not ready, retry',ps_pdf_done:'PDF exported',ps_pdf_fail:'PDF export failed, retry',ps_done:'Poster exported ({f})',ps_fail:'Export failed, retry',poster_fname:'Itinerary',poster_suffix:'-poster',
@@ -1790,7 +1790,7 @@ function renderSheetAdmin(){const el=document.getElementById('sheetContent');el.
    ========================================================= */
 /* 每套「风格」= 版式 + 字体 + 配色 三位一体，每套自带若干「色调」变体。
    设计参考：Apple 极简排版尺度 + 小红书/杂志/商务/时尚行程海报范式。 */
-const posterState={style:'fresh',tone:0,scope:'all',day:0,cat:'',modules:{time:true,loc:true,cat:true,img:true,people:true,agenda:true}};
+const posterState={style:'fresh',tone:0,scope:'all',day:0,cat:'',modules:{time:true,loc:true,cat:true,img:true,people:true,bio:true,companyDesc:true,agenda:true}};
 const STYLES=[
   {id:'fresh',name:'商务·简约',cover:true,tones:[
     {name:'暖阳',bg:'#FFF8F1',ink:'#3A2E26',mut:'#A2917F',line:'#F1E7DA',accent:'#EA6A47'},
@@ -1816,14 +1816,18 @@ function buildPC(){const p=document.getElementById('pScopePick');drawScope();
   if(posterState.scope==='day')p.innerHTML=`<select onchange="posterState.day=+this.value;renderPoster()" class="w-full text-xs rounded-lg bg-ink/5 border border-line px-2 py-2">${data.days.map((d,i)=>`<option value="${i}" ${i===posterState.day?'selected':''}>${d.label} · ${d.title}</option>`).join('')}</select>`;
   else if(posterState.scope==='cat')p.innerHTML=`<select onchange="posterState.cat=this.value;renderPoster()" class="w-full text-xs rounded-lg bg-ink/5 border border-line px-2 py-2">${data.categories.map(c=>`<option value="${c.id}" ${c.id===posterState.cat?'selected':''}>${c.name}</option>`).join('')}</select>`;
   else p.innerHTML='';
-  document.getElementById('pModules').innerHTML=[['time','mod_time'],['loc','mod_loc'],['cat','mod_cat'],['img','mod_img'],['people','mod_people'],['agenda','mod_agenda']].map(([k,n])=>`<label class="flex items-center gap-2 text-sm cursor-pointer rounded-lg px-2 py-1.5 hover:bg-accent-soft"><input type="checkbox" ${posterState.modules[k]?'checked':''} onchange="posterState.modules['${k}']=this.checked;renderPoster()" style="accent-color:var(--accent)">${t(n)}</label>`).join('');}
+  document.getElementById('pModules').innerHTML=[['time','mod_time'],['loc','mod_loc'],['cat','mod_cat'],['img','mod_img'],['people','mod_people'],['bio','mod_bio'],['companyDesc','mod_company'],['agenda','mod_agenda']].map(([k,n])=>`<label class="flex items-center gap-2 text-sm cursor-pointer rounded-lg px-2 py-1.5 hover:bg-accent-soft"><input type="checkbox" ${posterState.modules[k]?'checked':''} onchange="posterState.modules['${k}']=this.checked;renderPoster()" style="accent-color:var(--accent)">${t(n)}</label>`).join('');}
 function pItems(){let it=[];if(posterState.scope==='all')data.days.forEach(d=>d.events.forEach(e=>it.push(Object.assign({day:d.label,dayDate:d.date},e))));else if(posterState.scope==='day'){const d=data.days[posterState.day];if(d)d.events.forEach(e=>it.push(Object.assign({day:d.label,dayDate:d.date},e)));}else data.days.forEach(d=>d.events.filter(e=>e.cat===posterState.cat).forEach(e=>it.push(Object.assign({day:d.label,dayDate:d.date},e))));return it;}
 function stripHTML(h){const d=document.createElement('div');d.innerHTML=h||'';return d.textContent||'';}
 function firstImg(h){const d=document.createElement('div');d.innerHTML=h||'';const im=d.querySelector('img');return im?im.getAttribute('src'):'';}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function posterMeta(){
-  const head=posterState.scope==='day'?(data.days[posterState.day]||{}).title:(posterState.scope==='cat'?(catMap()[posterState.cat]||{}).name:data.title);
-  const sub=posterState.scope==='day'?fmtDate((data.days[posterState.day]||{}).date):(posterState.scope==='cat'?t('pt_topic'):data.subtitle);
+  const head=posterState.scope==='day'?data.title:(posterState.scope==='cat'?(catMap()[posterState.cat]||{}).name:data.title);
+  let sub='';
+  if(posterState.scope==='day'){
+    const iso=(data.days[posterState.day]||{}).date;
+    if(iso){const d=new Date(iso+'T00:00:00');const wk=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];if(!isNaN(d))sub=(d.getMonth()+1)+'.'+d.getDate()+' '+wk[d.getDay()];}
+  }else{sub=posterState.scope==='cat'?t('pt_topic'):data.subtitle;}
   return {head:esc(head||t('pt_itinerary')),sub:esc(sub||'')};
 }
 const SERIF="'Songti SC','STSong','Noto Serif SC',Georgia,serif";
@@ -1838,7 +1842,8 @@ function renderPoster(){
   const dayTag=(e,c)=>posterState.scope==='all'?`<span style="font-size:11px;color:${c||p.mut};font-weight:600">${esc(e.day)}${e.dayDate?' · '+fmtShort(e.dayDate):''}</span>`:'';
   const note=(e,c)=>M.note&&stripHTML(e.note)?`<div style="font-size:12px;color:${c||p.mut};margin-top:5px;line-height:1.55">${esc(stripHTML(e.note))}</div>`:'';
   const img=(e)=>{if(!M.img)return '';const imgs=[];if(e.img)imgs.push(e.img);if(e.gallery)for(let gi=0;gi<e.gallery.length&&imgs.length<2;gi++){const gs=e.gallery[gi].src||e.gallery[gi];if(gs&&gs!==e.img)imgs.push(gs);}if(!imgs.length){const fi=firstImg(e.note);if(fi)imgs.push(fi);}if(!imgs.length)return '';if(imgs.length===1)return `<div style="margin-top:9px"><img src="${imgs[0]}" style="width:100%;max-height:150px;object-fit:cover;border-radius:11px;display:block"></div>`;return `<div style="margin-top:9px;display:flex;gap:6px">${imgs.slice(0,2).map(s=>`<img src="${s}" style="flex:1;width:0;max-height:150px;object-fit:cover;border-radius:11px;display:block">`).join('')}</div>`;};
-  const people=(e)=>{if(!M.people||!e.people||!e.people.length)return '';const ceoIdx=e.people.findIndex(pp=>/CEO|Founder|Co-founder|联合创始人|创始人|总裁|President/i.test(pp.role||''));const items=e.people.map((pp,i)=>{const isCEO=(i===ceoIdx&&ceoIdx>=0);const photo=pp.img?'<img src="'+pp.img+'" crossorigin="anonymous" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none">':'<div style="width:32px;height:32px;border-radius:50%;background:'+(p.accent||'#888')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none">'+esc((pp.name||'?')[0])+'</div>';return '<div style="display:flex;align-items:flex-start;gap:8px;'+(isCEO?'width:100%':'width:calc(50% - 4px)')+'">'+photo+'<div style="min-width:0"><div style="font-size:12px;font-weight:600;color:'+p.ink+'">'+esc(pp.name||'')+'</div><div style="font-size:10.5px;color:'+p.mut+'">'+esc(pp.role||'')+'</div></div></div>';}).join('');return '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">'+items+'</div>';};
+  const people=(e)=>{if(!M.people||!e.people||!e.people.length)return '';const ceoIdx=e.people.findIndex(pp=>/CEO|Founder|Co-founder|联合创始人|创始人|总裁|President/i.test(pp.role||''));const items=e.people.map((pp,i)=>{const isCEO=(i===ceoIdx&&ceoIdx>=0);const photo=pp.img?'<img src="'+pp.img+'" crossorigin="anonymous" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none">':'<div style="width:32px;height:32px;border-radius:50%;background:'+(p.accent||'#888')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none">'+esc((pp.name||'?')[0])+'</div>';const bio=M.bio&&pp.bio?'<div style="font-size:10px;color:'+p.mut+';margin-top:2px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+esc(pp.bio)+'</div>':'';return '<div style="display:flex;align-items:flex-start;gap:8px;'+(isCEO?'width:100%':'width:calc(50% - 4px)')+'">'+photo+'<div style="min-width:0"><div style="font-size:12px;font-weight:600;color:'+p.ink+'">'+esc(pp.name||'')+'</div><div style="font-size:10.5px;color:'+p.mut+'">'+esc(pp.role||'')+'</div>'+bio+'</div></div>';}).join('');return '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">'+items+'</div>';};
+  const companyDesc=(e)=>{if(!M.companyDesc||!e.companyDesc)return '';return '<div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(0,0,0,.03);font-size:11px;color:'+p.mut+';line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">'+esc(e.companyDesc)+'</div>';};
 const agenda=(e)=>{if(!M.agenda||!e.agenda||!e.agenda.length)return '';const items=e.agenda.filter(a=>!a.noBullet);if(!items.length)return '';return `<div style="margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.03)">${items.map(a=>`<div style="padding:2px 0"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:11px;font-weight:600;color:${p.mut};flex:none;min-width:42px;font-variant-numeric:tabular-nums">${esc(a.time||'')}</span><span style="font-size:12px;color:${p.ink};line-height:1.4">${esc(a.topic||'')}</span></div>${a.speaker?`<div style="margin-left:50px;font-size:10.5px;color:${p.mut};margin-top:1px">${esc(a.speaker)}</div>`:''}</div>`).join('')}</div>`;};
 const tm=(e)=>M.time?(e.end&&e.end!=='—'&&e.end!==e.start?esc(e.start)+'–'+esc(e.end):esc(e.start)):'';
   const dots=(c)=>data.categories.slice(0,6).map(x=>`<span style="width:7px;height:7px;border-radius:99px;background:${x.color};display:inline-block"></span>`).join('');
@@ -1846,7 +1851,7 @@ const tm=(e)=>M.time?(e.end&&e.end!=='—'&&e.end!==e.start?esc(e.start)+'–'+e
   // 按天分组：范围为「单天」时不分组（单组无头），其余（整体/按分类）按天分段
   const grouped=posterState.scope!=='day';
   const groups=(()=>{const map=[],idx={};items.forEach(e=>{const k=e.day||'';if(idx[k]==null){idx[k]=map.length;map.push({day:e.day,date:e.dayDate,items:[]});}map[idx[k]].items.push(e);});return grouped?map:[{day:null,date:null,items}];})();
-  const x={st,p,cm,M,items,head,sub,cover,dayCount,esc,stripHTML,fmtShort,catName,catCol,chip,loc,dayTag,note,img,people,agenda,tm,dots,brand,groups,grouped};
+  const x={st,p,cm,M,items,head,sub,cover,dayCount,esc,stripHTML,fmtShort,catName,catCol,chip,loc,dayTag,note,img,people,companyDesc,agenda,tm,dots,brand,groups,grouped};
   const empty='<div style="text-align:center;color:'+p.mut+';font-size:13px;padding:24px 0">'+t('pt_no_events')+'</div>';
   let shell=({minimal:stMinimal,fresh:stFresh,biz:stBiz,fashion:stFashion}[st.id]||stFresh)(x,empty);
   document.getElementById('posterCanvas').innerHTML=`<style>.poster{overflow:hidden;box-shadow:0 40px 90px -35px rgba(0,0,0,.55);font-family:var(--font)}.poster *{box-sizing:border-box}</style>${shell}`;
@@ -1859,7 +1864,7 @@ function stMinimal(x,empty){const {p,groups,head,sub,M,items}=x;
       ${x.chip(e)}
     </div>
     <div style="font-size:16px;font-weight:600;color:${p.ink};line-height:1.3;letter-spacing:-.01em;margin-top:6px">${x.esc(e.title)}</div>
-    <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:5px">${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
+    <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:5px">${x.loc(e)}</div>${x.note(e)}${x.companyDesc(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
   </div>`;
   let gi=0;
   const dhead=g=>x.grouped&&g.day?`<div style="display:flex;align-items:baseline;gap:12px;margin:30px 0 6px"><span style="font-family:var(--font-head);font-size:13px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:${p.accent}">${x.esc(g.day)}</span>${g.date?`<span style="font-size:12px;color:${p.mut};font-variant-numeric:tabular-nums">${x.fmtShort(g.date)}</span>`:''}<span style="flex:1;height:1px;background:${p.line}"></span></div>`:'';
@@ -1870,6 +1875,7 @@ function stMinimal(x,empty){const {p,groups,head,sub,M,items}=x;
       <div style="font-size:11px;color:${p.mut};font-variant-numeric:tabular-nums;letter-spacing:.03em">${t('pt_summary',{d:x.dayCount,n:items.length})}</div>
     </div>
     <div style="font-family:var(--font-head);font-size:46px;font-weight:800;line-height:1.0;letter-spacing:-.04em;margin-top:20px">${head}</div>
+    ${sub?`<div style="font-size:13px;font-weight:600;color:${p.mut};margin-top:10px;letter-spacing:.03em">${sub}</div>`:''}
     <div style="margin-top:26px;border-radius:20px;overflow:hidden;height:200px"><img src="${x.cover}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block"></div>
     <div style="height:1px;background:${p.ink};margin:26px 0 0"></div>
     ${body}
@@ -1883,7 +1889,7 @@ function stFresh(x,empty){const {p,groups,M,head,sub,cover,items}=x;
       ${x.chip(e)}
     </div>
     <div style="font-size:15px;font-weight:700;color:${p.ink};line-height:1.3;margin-top:5px">${x.esc(e.title)}</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">${x.loc(e)}</div>${x.note(e)}${x.companyDesc(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
   </div>`;
   const dhead=g=>x.grouped&&g.day?`<div style="display:flex;align-items:center;gap:9px;margin:6px 0 12px"><span style="background:${p.accent};color:#fff;border-radius:99px;padding:4px 13px;font-size:12px;font-weight:800">${x.esc(g.day)}</span>${g.date?`<span style="font-size:12px;color:${p.mut};font-weight:600">${x.fmtShort(g.date)}</span>`:''}<span style="flex:1;height:1px;background:${p.line}"></span></div>`:'';
   const body=items.length?groups.map(g=>`${dhead(g)}${g.items.map(row).join('')}`).join(''):empty;
@@ -1893,6 +1899,7 @@ function stFresh(x,empty){const {p,groups,M,head,sub,cover,items}=x;
       <div style="position:absolute;left:24px;right:24px;bottom:22px;color:#fff">
         <span style="display:inline-block;background:rgba(255,255,255,.92);color:${p.accent};border-radius:99px;padding:4px 13px;font-size:11px;font-weight:800;letter-spacing:.06em">${x.dayCount} DAYS · ${items.length} STOPS</span>
         <div style="font-family:var(--font-head);font-size:33px;font-weight:800;line-height:1.08;margin-top:11px;text-shadow:0 2px 20px rgba(0,0,0,.4)">${head}</div>
+        ${sub?`<div style="font-size:14px;font-weight:600;margin-top:6px;opacity:.85;letter-spacing:.03em">${sub}</div>`:''}
       </div>
     </div>
     <div style="padding:20px 18px 6px">${body}</div>
@@ -1910,7 +1917,7 @@ function stBiz(x,empty){const {p,items,M,head,sub}=x;
         ${x.chip(e)}
       </div>
       <div style="font-size:14.5px;font-weight:700;color:${p.ink};line-height:1.3;margin-top:4px">${x.esc(e.title)}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">${x.loc(e)}</div>${x.note(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}</div>`).join('');
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">${x.loc(e)}</div>${x.note(e)}${x.companyDesc(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}</div>`).join('');
     return `<div style="padding:10px 0">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-family:var(--font-head);font-size:13px;font-weight:800;letter-spacing:.08em;color:${p.accent}">${x.esc(dk)}</span>${byDay[dk][0].dayDate?`<span style="font-size:11px;color:${p.mut};letter-spacing:.04em">${fmtShort(byDay[dk][0].dayDate)}</span>`:''}<span style="flex:1;height:1px;background:${p.line}"></span></div>
       ${rows}
@@ -1921,6 +1928,7 @@ function stBiz(x,empty){const {p,items,M,head,sub}=x;
       <div style="position:absolute;right:20px;bottom:-30px;width:110px;height:110px;border:1px solid rgba(255,255,255,.1);border-radius:50%"></div>
       <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:${p.accent};font-weight:700">Business Itinerary</div>
       <div style="font-family:var(--font-head);font-size:32px;font-weight:800;line-height:1.1;margin-top:12px;letter-spacing:-.01em">${head}</div>
+      ${sub?`<div style="font-size:13px;font-weight:600;margin-top:8px;opacity:.8;letter-spacing:.03em">${sub}</div>`:''}
       <div style="display:inline-flex;gap:14px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.16);font-size:12px">
         <span><b style="font-family:var(--font-head);font-size:17px;color:${p.accent}">${x.dayCount}</b> ${t('pt_days_word')}</span>
         <span><b style="font-family:var(--font-head);font-size:17px;color:${p.accent}">${items.length}</b> ${t('pt_items_word')}</span>
@@ -1937,7 +1945,7 @@ function stFashion(x,empty){const {p,groups,M,head,sub,cover,items}=x;
       ${x.chip(e,true)}
     </div>
     <div style="font-family:var(--font-head);font-size:19px;font-weight:800;color:${p.ink};line-height:1.15;margin-top:8px;letter-spacing:-.01em">${x.esc(e.title)}</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:5px">${x.loc(e,p.mut)}</div>${x.note(e,p.mut)}${x.img(e)}${x.people(e)}${x.agenda(e)}
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:5px">${x.loc(e,p.mut)}</div>${x.note(e,p.mut)}${x.companyDesc(e)}${x.img(e)}${x.people(e)}${x.agenda(e)}
   </div>`;
   const dhead=g=>x.grouped&&g.day?`<div style="display:flex;align-items:center;gap:10px;margin:18px 0 6px"><span style="font-family:var(--font-head);font-size:15px;font-weight:800;letter-spacing:.16em;color:${p.accent};text-transform:uppercase">${x.esc(g.day)}</span>${g.date?`<span style="font-size:11px;color:${p.mut};letter-spacing:.1em">${x.fmtShort(g.date)}</span>`:''}<span style="flex:1;height:2px;background:${p.accent};opacity:.5"></span></div>`:'';
   const body=items.length?groups.map(g=>`${dhead(g)}${g.items.map((e,i)=>row(e,i)).join('')}`).join(''):empty;
@@ -1951,6 +1959,7 @@ function stFashion(x,empty){const {p,groups,M,head,sub,cover,items}=x;
           <span style="font-family:var(--font-head);font-size:10px;letter-spacing:.05em;color:#fff;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px);color:transparent;width:60px;height:22px;display:inline-block;border-radius:2px"></span>
         </div>
         <div style="font-family:var(--font-head);font-size:40px;font-weight:800;line-height:1.0;margin-top:44px;letter-spacing:-.02em;color:${p.accent}">${head}</div>
+        ${sub?`<div style="font-size:13px;color:#fff;opacity:.75;margin-top:8px;font-weight:600;letter-spacing:.03em">${sub}</div>`:''}
         <div style="font-size:11px;color:#fff;opacity:.7;margin-top:8px;letter-spacing:.1em">${x.dayCount} DAYS / ${items.length} STOPS</div>
       </div>
     </div>

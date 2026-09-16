@@ -552,8 +552,8 @@
       "events": [
         {
           "id": "gbg_975e2993",
-          "start": "09:00",
-          "end": "10:30",
+          "start": "11:00",
+          "end": "12:00",
           "title": "Glass Bead Games",
           "cat": "初创公司",
           "loc": "Alibaba Office",
@@ -569,15 +569,6 @@
               "files": []
             }
           ]
-        },
-        {
-          "start": "10:30",
-          "end": "12:00",
-          "title": "Reserved for start-ups",
-          "cat": "初创公司",
-          "loc": "Alibaba Office",
-          "note": "",
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085"
         },
         {
           "start": "12:30",

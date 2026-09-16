@@ -429,27 +429,7 @@
           "addr": "",
           "loc_en": "Cloudflare SF Office",
           "address": "",
-          "address_en": "",
-          "agenda": [
-            {
-              "time": "",
-              "topic": "AI Security: Securing AI-powered applications\nAI安全：为AI驱动的应用提供安全保障",
-              "speaker": "Allan Leinwand (Chief Engineering Officer)",
-              "note": ""
-            },
-            {
-              "time": "",
-              "topic": "Agentic Commerce: The future of AI-driven transactions\n智能体商务：AI驱动交易的未来",
-              "speaker": "Bobby Mak (VP, Business Development & Strategy, Asia)",
-              "note": ""
-            },
-            {
-              "time": "",
-              "topic": "CloudflareOS: How we built our own AI agent workspace\nCloudflareOS：我们如何构建自己的AI智能体工作空间",
-              "speaker": "Stephanie Cohen (Chief Strategy Officer)",
-              "note": ""
-            }
-          ]
+          "address_en": ""
         },
         {
           "start": "14:30",

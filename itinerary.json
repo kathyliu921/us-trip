@@ -521,7 +521,11 @@
           "addr": "2 Beach St, San Francisco, CA 94133",
           "loc_en": "Crab House at Pier 39",
           "address": "2 Beach St, San Francisco, CA 94133",
-          "address_en": "2 Beach St, San Francisco, CA 94133"
+          "address_en": "2 Beach St, San Francisco, CA 94133",
+          "photos": [
+            "https://raw.githubusercontent.com/kathyliu921/us-trip/main/assets/crab_house_1.jpg",
+            "https://raw.githubusercontent.com/kathyliu921/us-trip/main/assets/crab_house_2.jpg"
+          ]
         }
       ]
     },

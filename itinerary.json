@@ -602,7 +602,7 @@
         },
         {
           "start": "12:30",
-          "end": "18:30",
+          "end": "18:00",
           "title": "Google",
           "cat": "头部科技公司",
           "loc": "Google Main Campus, Partner Plex",
@@ -838,17 +838,6 @@
           ],
           "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
           "companyDesc": "Virtue AI 专注可信人工智能与企业级 AI 安全，提供大模型安全防御、数据隐私保护、部署风险控制及 AI 合规评估解决方案。"
-        },
-        {
-          "start": "15:30",
-          "end": "17:00",
-          "title": "Kaon (FlowGPT)",
-          "cat": "初创公司",
-          "loc": "Alibaba Office",
-          "note": "",
-          "people": [],
-          "addr": "525 Almanor Ave suite 400, Sunnyvale, CA 94085",
-          "companyDesc": "Kaon AI（前身 FlowGPT）是全球领先的生成式 AI 提示词工程、AI 角色扮演与智能体创作者互动社区平台。从 Prompt 分享社区起步，演进为连接全球数百万创作者的全开放 GenAI 互动生态，用户无需编程即可创建个性化 AI 角色与自动化工作流，是目前全球 GenAI 领域活跃度最高的智能体分发生态之一。"
         },
         {
           "start": "17:00",

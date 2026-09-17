@@ -913,6 +913,16 @@
           "companyDesc": "Virtue AI 专注可信人工智能与企业级 AI 安全，提供大模型安全防御、数据隐私保护、部署风险控制及 AI 合规评估解决方案。"
         },
         {
+          "start": "15:30",
+          "end": "16:30",
+          "title": "Leader Debrief",
+          "cat": "团队活动",
+          "loc": "",
+          "note": "",
+          "addr": "",
+          "people": []
+        },
+        {
           "start": "17:00",
           "end": "21:00",
           "title": "Hold for team",
